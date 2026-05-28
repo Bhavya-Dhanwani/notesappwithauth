@@ -24,4 +24,23 @@ function signupValidator(name, email, password) {
     }
 }
 
-export { signupValidator };
+function loginValidator(email, password) {
+
+    // Validating the data receiced
+    if (!email) {
+        throw new ApiError(400, "Email is requires");
+    }
+
+    if (!password) {
+        throw new ApiError(400, "Password is required");
+    }
+
+    // added regex to test email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(email)) {
+        throw new ApiError(400, "Email is not valid");
+    }
+}
+
+export { signupValidator, loginValidator };

@@ -1,5 +1,6 @@
 import userModel from "../models/user.model.js";
-import { signupValidator } from "../utils/validation.util.js";
+import ApiError from "../utils/ApiError.util.js";
+import { loginValidator, signupValidator } from "../utils/validation.util.js";
 
 // Signup service to add the user 
 async function signupService(name, email, password) {
@@ -16,4 +17,28 @@ async function signupService(name, email, password) {
     return { jwt, user };
 }
 
-export { signupService }
+async function loginService(email, password) {
+
+    // Validating the data
+    loginValidator(email, password);
+
+    // Finding the user
+    let user;
+
+    try {
+        user = await userModel.findOne({ email });
+    } catch (err) {
+        throw new ApiError(409, "User not found");
+    }
+
+    if (!user.comparePassowrd(password)) {
+        throw new ApiError(401, "User unauthorized.")
+    }
+
+    // generating the jwt
+    const jwt = user.generateJwt();
+
+    return { jwt, user };
+}
+
+export { signupService, loginService }
