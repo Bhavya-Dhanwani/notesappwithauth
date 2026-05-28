@@ -5,7 +5,7 @@ import mongoose, { mongo } from "mongoose";
 // User Schema for adding a user
 const userSchema = new mongoose.Schema({
     name: String,
-    email: Stirng,
+    email: String,
     password: String
 });
 
@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", function() {
 
     // Checking the password is hashed or not
-    if (this.modified("password")) return;
+    if (!this.isModified("password")) return;
 
     // Hashing the password
     this.password = bcrypt.hashSync(this.password, 10);
@@ -26,7 +26,9 @@ userSchema.methods.generateJwt = function() {
     return jwt.sign({
         id: this._id,
         email: this.email
-    }, process.env.JWT_SECRET)
+    }, process.env.JWT_SECRET, {
+        expiresIn: "7d"
+    });
 }
 
 // A method to compare Password
