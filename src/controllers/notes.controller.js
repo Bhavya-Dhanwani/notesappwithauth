@@ -1,4 +1,4 @@
-import { createService, getService } from "../services/notes.service.js";
+import { createService, getService, updateService } from "../services/notes.service.js";
 import ApiError from "../utils/ApiError.util.js";
 import ApiResponse from "../utils/ApiResponse.util.js";
 
@@ -26,7 +26,7 @@ async function createNotes(req, res) {
 
 /*
 @access Private - to logged in users
-@Use to create notes
+@Use to get notes
 @type POST
 */
 async function getNotes(req, res) {
@@ -42,4 +42,27 @@ async function getNotes(req, res) {
     ApiResponse(res, 200, "Notes fetched successfully", notes);
 }
 
-export { createNotes, getNotes };
+/*
+@access Private - to logged in users
+@Use to update
+@type PATCH
+*/
+
+async function updateNotes(req, res) {
+    
+    // accepting the data 
+    let id = req.params.id;
+    let { title, description } = req.body;
+
+    // Checking for user 
+    if (!req.user) {
+        throw new ApiError(409, "User unauthorized");
+    }
+
+    // update the notes
+    const notes = await updateService(id, title, description);
+
+    ApiResponse(res, 200, "Notes updated Successfully", notes);
+}
+
+export { createNotes, getNotes, updateNotes };
