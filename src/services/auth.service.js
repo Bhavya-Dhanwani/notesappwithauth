@@ -1,6 +1,6 @@
 import userModel from "../models/user.model.js";
 import ApiError from "../utils/ApiError.util.js";
-import { loginValidator, signupValidator } from "../utils/validation.util.js";
+import { loginValidator, signupValidator } from "../validators/auth.validater.js";
 
 // Signup service to add the user 
 async function signupService(name, email, password) {

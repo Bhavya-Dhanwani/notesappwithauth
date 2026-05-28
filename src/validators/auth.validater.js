@@ -1,4 +1,4 @@
-import ApiError from "./ApiError.util.js";
+import ApiError from "../utils/ApiError.util.js";
 
 // Funciton to validate the sign up inputs
 function signupValidator(name, email, password) {
