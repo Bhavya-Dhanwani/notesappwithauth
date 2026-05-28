@@ -12,4 +12,13 @@ async function createService(title, description, email) {
     return notes;
 }
 
-export { createService };
+async function getService(email) {
+
+    // Finding notes of same email id 
+    const notes = await notesModel.find({email});
+
+    // retunning the notes
+    return notes;
+}
+
+export { createService, getService };
