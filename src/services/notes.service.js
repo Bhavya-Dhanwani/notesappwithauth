@@ -3,6 +3,7 @@ import notesModel from "../models/notes.model.js";
 import validateNotes from "../validators/notes.validater.js";
 import ApiError from "../utils/ApiError.util.js";
 
+// Funciton to create the notes 
 async function createService(title, description, email) {
 
     // Validating the data
@@ -14,6 +15,8 @@ async function createService(title, description, email) {
     return notes;
 }
 
+
+// Function to get the notes 
 async function getService(email) {
 
     // Finding notes of same email id 
@@ -23,6 +26,8 @@ async function getService(email) {
     return notes;
 }
 
+
+// Function to update the notes 
 async function updateService(id, title, description) {
 
     // Checking if the id is a true if or not
@@ -51,4 +56,23 @@ async function updateService(id, title, description) {
 
 }
 
-export { createService, getService, updateService };
+// function to delte the ntoes
+async function deleteService(id) {
+
+    // Checking if the id is a true if or not
+    if (!mongoose.Types.ObjectId.isValid(id)) throw new ApiError(400, "Id not valid");
+
+    let notes;
+
+    // Checking if notes exists
+    try {
+        notes = await notesModel.findByIdAndDelete(id);
+    } catch (err) {
+        throw new ApiError(409, "Notes not found");
+    }
+
+    return ;
+
+}
+
+export { createService, getService, updateService, deleteService };

@@ -1,4 +1,4 @@
-import { createService, getService, updateService } from "../services/notes.service.js";
+import { createService, deleteService, getService, updateService } from "../services/notes.service.js";
 import ApiError from "../utils/ApiError.util.js";
 import ApiResponse from "../utils/ApiResponse.util.js";
 
@@ -44,10 +44,9 @@ async function getNotes(req, res) {
 
 /*
 @access Private - to logged in users
-@Use to update
+@Use to update the notes
 @type PATCH
 */
-
 async function updateNotes(req, res) {
     
     // accepting the data 
@@ -65,4 +64,25 @@ async function updateNotes(req, res) {
     ApiResponse(res, 200, "Notes updated Successfully", notes);
 }
 
-export { createNotes, getNotes, updateNotes };
+/*
+@access Private - to logged in users
+@Use to delete the notes
+@type DELETE
+*/
+async function deleteNotes(req, res) {
+    
+    // accepting the data 
+    let id = req.params.id;
+
+    // Checking for user 
+    if (!req.user) {
+        throw new ApiError(409, "User unauthorized");
+    }
+
+    // update the notes
+    await deleteService(id);
+
+    ApiResponse(res, 204, "Notes deleted Successfully");
+}
+
+export { createNotes, getNotes, updateNotes, deleteNotes };
